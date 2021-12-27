@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Travel } from '../models/Travel';
 
-export const index = async (req: Request, res: Response) => {
+export const getAll = async (req: Request, res: Response) => {
     try {
         let viagens = await Travel.find();
 
@@ -11,58 +11,60 @@ export const index = async (req: Request, res: Response) => {
     }
 }
 
-export const store = async (req: Request, res: Response) => {
-    /*try {
-        let {author, txt} = req.body;
+export const start = async (req: Request, res: Response) => {
+    try {
+        const {trajeto_id} = req.body;
+        const tempoInicio = new Date();
 
-        let newPhrase = await Phrase.create({author, txt});
+        const newTravel = await Travel.create({
+            trajeto_id, tempoInicio, tempoTermino: null
+        });
         
-        res.status(201).json(newPhrase);
+        res.status(201).json(newTravel);
     } catch (error){
         res.status(400).json({error})
-    }*/
+    }
 }
 
-export const show = async (req: Request, res: Response) => {
-    /*try {
+export const getOne = async (req: Request, res: Response) => {
+    try {
         let {_id} = req.params;
 
-        let phrase = await Phrase.findById(_id);
+        let travel = await Travel.findById(_id);
 
         res.status(200);
 
-        if (phrase){
-            res.json(phrase);
+        if (travel){
+            res.json(travel);
         } else {
-            res.json({error: {message: 'Frase não encontrada'}});
+            res.json({error: {message: 'Viagem não encontrada'}});
         }
 
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }
 
-export const update = async (req: Request, res: Response) => {
-    /*try {
+export const updateCurrentLocation = async (req: Request, res: Response) => {
+    try {
         let {_id} = req.params;
-        let {author, txt} = req.body;
+        let {lat, long} = req.body;
+        console.log(lat, long);
 
-        let phrase = await Phrase.findById(_id);
-        
+        let travel = await Travel.findById(_id);
+
         res.status(200);
-        if (phrase){
-            phrase.author = author;
-            phrase.txt = txt;
-            await phrase.save();
+        if (travel){
+            travel.localizacao.push({lat, long});
+            await travel.save();
             
-            res.json(phrase);
+            res.json(travel);
         } else {
-            res.json({error: {message: 'Frase não encontrada.'}})
+            res.json({error: {message: 'Viagem não encontrada.'}})
         }
-
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }
 
 export const destroy = async (req: Request, res: Response) => {

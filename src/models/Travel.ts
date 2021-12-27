@@ -8,8 +8,8 @@ type TravelType = {
 }
 
 const schema = new Schema<TravelType>({
-    trajeto_id: Number,
-    tempoInicio: {type: Date, required: true, default: Date.now},
+    trajeto_id: {type: Number, required: true},
+    tempoInicio: {type: Date, required: true},
     tempoTermino: {type: Date},
     localizacao: {type: [{lat: Number, long: Number}]}
 })
