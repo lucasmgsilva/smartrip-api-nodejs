@@ -11,21 +11,6 @@ export const getAll = async (req: Request, res: Response) => {
     }
 }
 
-export const start = async (req: Request, res: Response) => {
-    try {
-        const {trajeto_id} = req.body;
-        const tempoInicio = new Date();
-
-        const newTravel = await Travel.create({
-            trajeto_id, tempoInicio, tempoTermino: null
-        });
-        
-        res.status(201).json(newTravel);
-    } catch (error){
-        res.status(400).json({error})
-    }
-}
-
 export const getOne = async (req: Request, res: Response) => {
     try {
         let {_id} = req.params;
@@ -42,6 +27,21 @@ export const getOne = async (req: Request, res: Response) => {
 
     } catch (error){
         res.status(400).json({error});
+    }
+}
+
+export const start = async (req: Request, res: Response) => {
+    try {
+        const {trajeto_id} = req.body;
+        const tempoInicio = new Date();
+
+        const newTravel = await Travel.create({
+            trajeto_id, tempoInicio, tempoTermino: null
+        });
+        
+        res.status(201).json(newTravel);
+    } catch (error){
+        res.status(400).json({error})
     }
 }
 
