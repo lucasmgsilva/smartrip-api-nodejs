@@ -3,8 +3,8 @@ import { connection, model, Schema } from "mongoose"
 type BusType = {
     description: string,
     licensePlate: string,
-    brand: string,
-    model: string
+    brand?: string,
+    model?: string
 }
 
 const schema = new Schema<BusType>({
