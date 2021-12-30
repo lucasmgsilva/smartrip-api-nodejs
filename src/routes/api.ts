@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import * as TravelController from '../controllers/travelController';
-import * as PhraseController from '../controllers/phraseController';
 
 const router = Router();
 
