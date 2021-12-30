@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import * as BusController from '../controllers/busController';
 import * as TravelController from '../controllers/travelController';
 
 const router = Router();
@@ -8,6 +9,9 @@ router.get('/ping', (req, res) => {
         pong: true
     })
 });
+
+router.get('/buses', BusController.index);
+router.post('/buses', BusController.store);
 
 router.get('/viagens', TravelController.getAll);
 router.get('/viagens/:_id', TravelController.getOne);
