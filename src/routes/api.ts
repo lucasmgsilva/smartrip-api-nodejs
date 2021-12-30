@@ -12,6 +12,9 @@ router.get('/ping', (req, res) => {
 
 router.get('/buses', BusController.index);
 router.post('/buses', BusController.store);
+router.get('/buses/:licensePlate', BusController.show);
+router.put('/buses/:licensePlate', BusController.update);
+router.delete('/buses/:licensePlate', BusController.destroy);
 
 router.get('/viagens', TravelController.getAll);
 router.get('/viagens/:_id', TravelController.getOne);

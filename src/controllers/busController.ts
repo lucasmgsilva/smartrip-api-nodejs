@@ -12,22 +12,21 @@ export const index = async (req: Request, res: Response) => {
 }
 
 export const show = async (req: Request, res: Response) => {
-    /*try {
-        let {_id} = req.params;
+    try {
+        let {licensePlate} = req.params;
 
-        let travel = await Travel.findById(_id);
+        let bus = await Bus.findOne({licensePlate});
 
         res.status(200);
 
-        if (travel){
-            res.json(travel);
+        if (bus){
+            res.json(bus);
         } else {
-            res.json({error: {message: 'Viagem não encontrada'}});
+            res.json({error: {message: 'Ônibus não encontrado.'}});
         }
-
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }
 
 export const store = async (req: Request, res: Response) => {
@@ -45,35 +44,43 @@ export const store = async (req: Request, res: Response) => {
 }
 
 export const update = async (req: Request, res: Response) => {
-    /*try {
-        let {_id} = req.params;
-        let {lat, long} = req.body;
-        console.log(lat, long);
+    try {
+        let {licensePlate} = req.params;
+        let newLicensePlate = req.body.licensePlate;
+        let {description, brand, model} = req.body;
 
-        let travel = await Travel.findById(_id);
-
+        let bus = await Bus.findOne({licensePlate});
+        
         res.status(200);
-        if (travel){
-            travel.localizacao.push({lat, long});
-            await travel.save();
+        if (bus){
+            bus.description = description;
+            bus.licensePlate = newLicensePlate;
+            bus.brand = brand;
+            bus.model = model;
+            await bus.save();
             
-            res.json(travel);
+            res.json(bus);
         } else {
-            res.json({error: {message: 'Viagem não encontrada.'}})
+            res.json({error: {message: 'Ônibus não encontrado.'}})
         }
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }
 
 export const destroy = async (req: Request, res: Response) => {
-    /*try {
-        let {_id} = req.params;
+    try {
+        let {licensePlate} = req.params;
 
-        await Phrase.remove({_id});
+        let bus = await Bus.findOneAndDelete({licensePlate});
         
-        res.status(200).json({}) 
+        res.status(200);
+        if (bus){
+            res.json(bus);
+        } else {
+            res.json({error: {message: 'Ônibus não encontrado.'}});
+        }
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }
