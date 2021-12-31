@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 import { Travel } from '../models/Travel';
 
-export const getAll = async (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
     try {
-        let viagens = await Travel.find();
+        let travels = await Travel.find();
 
-        res.status(200).json(viagens);
+        res.status(200).json(travels);
     } catch (error){
         res.status(400).json({error});
     }
 }
 
-export const getOne = async (req: Request, res: Response) => {
+export const show = async (req: Request, res: Response) => {
     try {
         let {_id} = req.params;
 
@@ -22,21 +22,19 @@ export const getOne = async (req: Request, res: Response) => {
         if (travel){
             res.json(travel);
         } else {
-            res.json({error: {message: 'Viagem não encontrada'}});
+            res.json({error: {message: 'Viagem não encontrada.'}});
         }
-
     } catch (error){
         res.status(400).json({error});
     }
 }
 
-export const start = async (req: Request, res: Response) => {
+export const store = async (req: Request, res: Response) => {
     try {
-        const {trajeto_id} = req.body;
-        const tempoInicio = new Date();
+        const {route_id, licensePlate_id, startTime, endTime, isWayBack, tracking} = req.body;
 
         const newTravel = await Travel.create({
-            trajeto_id, tempoInicio, tempoTermino: null
+            route_id, licensePlate_id, startTime, endTime, isWayBack, tracking
         });
         
         res.status(201).json(newTravel);
@@ -45,17 +43,42 @@ export const start = async (req: Request, res: Response) => {
     }
 }
 
+export const update = async (req: Request, res: Response) => {
+    try {
+        let {_id} = req.params;
+        let {route_id, licensePlate_id, startTime, endTime, isWayBack, tracking} = req.body;
+
+        let travel = await Travel.findById(_id);
+        
+        res.status(200);
+        if (travel){
+            travel.route_id = route_id;
+            travel.licensePlate_id = licensePlate_id;
+            travel.startTime = startTime;
+            travel.endTime = endTime;
+            travel.isWayBack = isWayBack;
+            travel.tracking = tracking;
+            await travel.save();
+            
+            res.json(travel);
+        } else {
+            res.json({error: {message: 'Viagem não encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
 export const updateCurrentLocation = async (req: Request, res: Response) => {
     try {
         let {_id} = req.params;
-        let {lat, long} = req.body;
-        console.log(lat, long);
+        let {lat, lng, speed, course} = req.body;
 
         let travel = await Travel.findById(_id);
 
         res.status(200);
         if (travel){
-            travel.localizacao.push({lat, long});
+            travel.tracking.push({lat, lng, speed, course});
             await travel.save();
             
             res.json(travel);
@@ -68,13 +91,18 @@ export const updateCurrentLocation = async (req: Request, res: Response) => {
 }
 
 export const destroy = async (req: Request, res: Response) => {
-    /*try {
+    try {
         let {_id} = req.params;
 
-        await Phrase.remove({_id});
+        let travel = await Travel.findOneAndDelete({_id});
         
-        res.status(200).json({}) 
+        res.status(200);
+        if (travel){
+            res.json(travel);
+        } else {
+            res.json({error: {message: 'Viagem não encontrada.'}});
+        }
     } catch (error){
         res.status(400).json({error});
-    }*/
+    }
 }

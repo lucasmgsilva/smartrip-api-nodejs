@@ -33,15 +33,11 @@ router.get('/users/:_id', UserController.show);
 router.put('/users/:_id', UserController.update);
 router.delete('/users/:_id', UserController.destroy);
 
-router.get('/viagens', TravelController.getAll);
-router.get('/viagens/:_id', TravelController.getOne);
-router.post('/viagens', TravelController.start);
-router.put('/viagens/:_id', TravelController.updateCurrentLocation);
-
-/*router.get('/frases', PhraseController.index); //Lista todas as frases
-router.post('/frases', PhraseController.store); //Armazena uma frase
-router.get('/frases/:_id', PhraseController.show); //Mostra uma frase
-router.put('/frases/:_id', PhraseController.update); //Atualiza uma frase
-router.delete('/frases/:_id', PhraseController.destroy); //Destrói uma frase*/
+// Travels
+router.get('/travels', TravelController.index);
+router.get('/travels/:_id', TravelController.show);
+router.post('/travels', TravelController.store);
+router.put('/travels/:_id', TravelController.update);
+router.put('/travels/:_id/tracking', TravelController.updateCurrentLocation);
 
 export default router;
