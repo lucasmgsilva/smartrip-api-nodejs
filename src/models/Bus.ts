@@ -21,8 +21,7 @@ const schema = new Schema<BusType>({
         required: true, 
         minlength: 8, 
         maxlength: 8, 
-        unique: true, 
-        index: true
+        unique: true
     },
     brand: {
         type: String, 

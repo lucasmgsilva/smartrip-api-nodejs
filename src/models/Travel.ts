@@ -3,13 +3,12 @@ import { connection, Date, model, Schema } from "mongoose"
 type TrackingType = {
     lat: number,
     lng: number,
-    speed: number,
-    course: number
+    speed: number
 }
 
 type TravelType = {
     route_id: Schema.Types.ObjectId,
-    licensePlate_id: Schema.Types.ObjectId,
+    bus_id: Schema.Types.ObjectId,
     startTime: Date,
     endTime?: Date,
     isWayBack: boolean,
@@ -33,12 +32,8 @@ const TrackingSchema = new Schema<TrackingType>({
         type: Number,
         required: true,
         min: 0
-    },
-    course: {
-        type: Number,
-        required: true
     }
-});
+}, {_id: false});
 
 const schema = new Schema<TravelType>({
     route_id: {
@@ -46,7 +41,7 @@ const schema = new Schema<TravelType>({
         ref: 'Route', 
         required: true
     },
-    licensePlate_id: {
+    bus_id: {
         type: Schema.Types.ObjectId,
         ref: 'Bus',
         required: true

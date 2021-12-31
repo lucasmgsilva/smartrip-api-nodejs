@@ -35,9 +35,10 @@ router.delete('/users/:_id', UserController.destroy);
 
 // Travels
 router.get('/travels', TravelController.index);
-router.get('/travels/:_id', TravelController.show);
 router.post('/travels', TravelController.store);
+router.get('/travels/:_id', TravelController.show);
+router.put('/travels/tracking/:_id', TravelController.updateCurrentLocation);
 router.put('/travels/:_id', TravelController.update);
-router.put('/travels/:_id/tracking', TravelController.updateCurrentLocation);
+router.delete('/travels/:_id', TravelController.destroy);
 
 export default router;
