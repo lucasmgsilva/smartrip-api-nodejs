@@ -8,10 +8,10 @@ type BusType = {
 }
 
 const schema = new Schema<BusType>({
-    description: {type: String, required: true, minlength: 3, maxlength: 25},
-    licensePlate: {type: String, required: true, minlength: 8, maxlength: 8, unique: true, index: true},
-    brand: {type: String, minlength: 3, maxlength: 15},
-    model: {type: String, minlength: 3, maxlength: 15}
+    description: {type: String, trim: true, required: true, minlength: 3, maxlength: 25},
+    licensePlate: {type: String, trim: true, required: true, minlength: 8, maxlength: 8, unique: true, index: true},
+    brand: {type: String, trim: true, minlength: 3, maxlength: 15},
+    model: {type: String, trim: true, minlength: 3, maxlength: 15}
 })
 
 const modelName: string = 'Bus';

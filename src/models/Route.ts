@@ -12,7 +12,7 @@ type StoppingPoint = {
 
 type City = {
     name: string,
-    federalUnit: string,
+    federativeUnit: string,
     stoppingPoints: [StoppingPoint]
 }
 
@@ -27,19 +27,19 @@ const CoordinateSchema = new Schema<Coordinate>({
 })
 
 const StoppingPointSchema = new Schema<StoppingPoint>({
-    description: {type: String, required: true, minlength: 3, maxlength: 25},
-    coordinates: CoordinateSchema
-})
+    description: {type: String, trim: true, required: true, minlength: 3, maxlength: 25},
+    coordinates: {type: CoordinateSchema, required: true}
+}, {_id: false})
 
 const CitySchema = new Schema<City>({
-    name: {type: String, required: true, minlength: 3, maxlength: 35},
-    federalUnit: {type: String, required: true, minlength: 2, maxlength: 2},
-    stoppingPoints: [StoppingPointSchema]
-});
+    name: {type: String, trim: true, required: true, minlength: 3, maxlength: 35},
+    federativeUnit: {type: String, trim: true, required: true, minlength: 2, maxlength: 2},
+    stoppingPoints: {type: [StoppingPointSchema], required: true}
+}, {_id: false});
 
 const schema = new Schema<RouteType>({
-    description: {type: String, required: true, minlength: 3, maxlength: 25},
-    cities: [CitySchema]
+    description: {type: String, trim: true, required: true, minlength: 3, maxlength: 45},
+    cities: {type: [CitySchema], required: true, unique: true}
 });
 
 const modelName: string = 'Route';
