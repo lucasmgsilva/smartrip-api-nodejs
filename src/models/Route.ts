@@ -22,24 +22,64 @@ type RouteType = {
 }
 
 const CoordinateSchema = new Schema<Coordinate>({
-    lat: {type: Number, required: true},
-    lng: {type: Number, required: true}
+    lat: {
+        type: Number, 
+        required: true
+    },
+    lng: {
+        type: Number, 
+        required: true
+    }
 })
 
 const StoppingPointSchema = new Schema<StoppingPoint>({
-    description: {type: String, trim: true, required: true, minlength: 3, maxlength: 25},
-    coordinates: {type: CoordinateSchema, required: true}
+    description: {
+        type: String, 
+        trim: true, 
+        required: true, 
+        minlength: 3, 
+        maxlength: 25
+    },
+    coordinates: {
+        type: CoordinateSchema, 
+        required: true
+    }
 }, {_id: false})
 
 const CitySchema = new Schema<City>({
-    name: {type: String, trim: true, required: true, minlength: 3, maxlength: 35},
-    federativeUnit: {type: String, trim: true, required: true, minlength: 2, maxlength: 2},
-    stoppingPoints: {type: [StoppingPointSchema], required: true}
+    name: {
+        type: String, 
+        trim: true, 
+        required: true, 
+        minlength: 3, 
+        maxlength: 35
+    },
+    federativeUnit: {
+        type: String, 
+        trim: true, 
+        required: true, 
+        minlength: 2, 
+        maxlength: 2
+    },
+    stoppingPoints: {
+        type: [StoppingPointSchema], 
+        required: true
+    }
 }, {_id: false});
 
 const schema = new Schema<RouteType>({
-    description: {type: String, trim: true, required: true, minlength: 3, maxlength: 45},
-    cities: {type: [CitySchema], required: true, unique: true}
+    description: {
+        type: String, 
+        trim: true, 
+        required: true, 
+        minlength: 3, 
+        maxlength: 45
+    },
+    cities: {
+        type: [CitySchema], 
+        required: true, 
+        unique: true
+    }
 });
 
 const modelName: string = 'Route';
