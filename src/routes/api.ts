@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as BusController from '../controllers/busController';
 import * as RouteController from '../controllers/routeController';
+import * as UserController from '../controllers/userController';
 import * as TravelController from '../controllers/travelController';
 
 const router = Router();
@@ -24,6 +25,13 @@ router.post('/routes', RouteController.store);
 router.get('/routes/:_id', RouteController.show);
 router.put('/routes/:_id', RouteController.update);
 router.delete('/routes/:_id', RouteController.destroy);
+
+// Users
+router.get('/users', UserController.index);
+router.post('/users', UserController.store);
+router.get('/users/:_id', UserController.show);
+router.put('/users/:_id', UserController.update);
+router.delete('/users/:_id', UserController.destroy);
 
 router.get('/viagens', TravelController.getAll);
 router.get('/viagens/:_id', TravelController.getOne);

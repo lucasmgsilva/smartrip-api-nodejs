@@ -61,7 +61,7 @@ export const update = async (req: Request, res: Response) => {
             
             res.json(bus);
         } else {
-            res.json({error: {message: 'Ônibus não encontrado.'}})
+            res.json({error: {message: 'Ônibus não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});

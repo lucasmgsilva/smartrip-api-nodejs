@@ -58,7 +58,7 @@ export const update = async (req: Request, res: Response) => {
             
             res.json(route);
         } else {
-            res.json({error: {message: 'Rota não encontrada.'}})
+            res.json({error: {message: 'Rota não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
