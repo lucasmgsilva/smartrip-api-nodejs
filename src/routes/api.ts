@@ -36,6 +36,7 @@ router.delete('/users/:_id', UserController.destroy);
 // Travels
 router.get('/travels', TravelController.index);
 router.post('/travels', TravelController.store);
+router.get('/travels/inProgress/:bus_id', TravelController.getTravelInProgressByBusID);
 router.get('/travels/:_id', TravelController.show);
 router.put('/travels/tracking/:_id', TravelController.updateCurrentLocation);
 router.put('/travels/:_id', TravelController.update);

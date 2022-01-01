@@ -29,6 +29,24 @@ export const show = async (req: Request, res: Response) => {
     }
 }
 
+export const getTravelInProgressByBusID = async (req: Request, res: Response) => {
+    try {
+        let {bus_id} = req.params;
+
+        let travel = await Travel.findOne({"bus_id": bus_id, "endTime": null});
+
+        res.status(200);
+
+        if (travel){
+            res.json(travel);
+        } else {
+            res.json({error: {message: 'Nenhuma viagem em progresso com esse ônibus foi encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
 export const store = async (req: Request, res: Response) => {
     try {
         const {route_id, bus_id, startTime, endTime, isWayBack, tracking} = req.body;
