@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { Travel } from '../models/Travel';
 
 export const index = async (req: Request, res: Response) => {
@@ -41,6 +41,31 @@ export const getTravelInProgressByBusID = async (req: Request, res: Response) =>
             res.json(travel);
         } else {
             res.json({error: {message: 'Nenhuma viagem em andamento com esse ônibus foi encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
+export const getCurrentLocationByTravelID = async (req: Request, res: Response) => {
+    try {
+        let {_id} = req.params;
+
+        let travel = await Travel.findOne({_id}, 'tracking');
+        
+        res.status(200);
+
+        if (travel){
+            let length = travel.tracking?.length;
+
+            if (length > 0){
+                let currentLocation = travel.tracking[length - 1];
+                res.json(currentLocation);
+            } else {
+                res.json({});
+            }
+        } else {
+            res.json({error: {message: 'Viagem não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
