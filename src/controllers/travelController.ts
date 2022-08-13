@@ -151,11 +151,11 @@ export const destroy = async (req: Request, res: Response) => {
 
         let travel = await Travel.findOneAndDelete({_id});
         
-        res.status(200);
+        ;
         if (travel){
-            res.json(travel);
+            res.status(204).json({});
         } else {
-            res.json({error: {message: 'Viagem não encontrada.'}});
+            res.status(200).json({error: {message: 'Viagem não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});

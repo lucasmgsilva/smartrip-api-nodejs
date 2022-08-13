@@ -76,11 +76,10 @@ export const destroy = async (req: Request, res: Response) => {
 
         let user = await User.findOneAndDelete({_id});
         
-        res.status(200);
         if (user){
-            res.json(user);
+            res.status(204).json({});
         } else {
-            res.json({error: {message: 'Usuário não encontrado.'}});
+            res.status(200).json({error: {message: 'Usuário não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});

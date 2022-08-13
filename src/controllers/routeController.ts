@@ -71,11 +71,10 @@ export const destroy = async (req: Request, res: Response) => {
 
         let route = await Route.findOneAndDelete({_id});
         
-        res.status(200);
         if (route){
-            res.json(route);
+            res.status(204).json({});
         } else {
-            res.json({error: {message: 'Rota não encontrada.'}});
+            res.status(200).json({error: {message: 'Rota não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
