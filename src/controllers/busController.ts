@@ -74,11 +74,10 @@ export const destroy = async (req: Request, res: Response) => {
 
         let bus = await Bus.findOneAndDelete({licensePlate});
         
-        res.status(200);
         if (bus){
-            res.json(bus);
+            res.status(204).json({});
         } else {
-            res.json({error: {message: 'Ônibus não encontrado.'}});
+            res.status(200).json({error: {message: 'Ônibus não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});
