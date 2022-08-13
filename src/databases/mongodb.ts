@@ -2,7 +2,7 @@ import { connect } from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
+//Teste
 export const mongoConnect = async () => {
     try {
         console.log('Conectando-se ao MongoDB...');
