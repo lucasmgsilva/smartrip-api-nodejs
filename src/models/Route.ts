@@ -14,7 +14,7 @@ type StoppingPoint = {
 type RouteType = {
     description: string,
     stoppingPoints: [StoppingPoint]
-    passengers: [Schema.Types.ObjectId]
+    passengers_id: [Schema.Types.ObjectId]
 }
 
 const CoordinateSchema = new Schema<Coordinate>({
@@ -59,7 +59,7 @@ const schema = new Schema<RouteType>({
         required: true, 
         unique: true
     },
-    passengers: {
+    passengers_id: {
         type: [Schema.Types.ObjectId],
         ref: 'User',
         required: false
