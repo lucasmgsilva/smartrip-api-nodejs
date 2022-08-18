@@ -7,18 +7,14 @@ type Coordinate = {
 
 type StoppingPoint = {
     description: string,
+    executionOrder: number,
     coordinates: Coordinate
-}
-
-type City = {
-    name: string,
-    federativeUnit: string,
-    stoppingPoints: [StoppingPoint]
 }
 
 type RouteType = {
     description: string,
-    cities: [City]
+    stoppingPoints: [StoppingPoint]
+    passengers_id: [Schema.Types.ObjectId]
 }
 
 const CoordinateSchema = new Schema<Coordinate>({
@@ -40,32 +36,15 @@ const StoppingPointSchema = new Schema<StoppingPoint>({
         minlength: 3, 
         maxlength: 25
     },
+    executionOrder: {
+        type: Number,
+        required: true
+    },
     coordinates: {
         type: CoordinateSchema, 
         required: true
     }
 }, {_id: false})
-
-const CitySchema = new Schema<City>({
-    name: {
-        type: String, 
-        trim: true, 
-        required: true, 
-        minlength: 3, 
-        maxlength: 35
-    },
-    federativeUnit: {
-        type: String, 
-        trim: true, 
-        required: true, 
-        minlength: 2, 
-        maxlength: 2
-    },
-    stoppingPoints: {
-        type: [StoppingPointSchema], 
-        required: true
-    }
-}, {_id: false});
 
 const schema = new Schema<RouteType>({
     description: {
@@ -75,10 +54,15 @@ const schema = new Schema<RouteType>({
         minlength: 3, 
         maxlength: 45
     },
-    cities: {
-        type: [CitySchema], 
+    stoppingPoints: {
+        type: [StoppingPointSchema], 
         required: true, 
         unique: true
+    },
+    passengers_id: {
+        type: [Schema.Types.ObjectId],
+        ref: 'User',
+        required: false
     }
 });
 

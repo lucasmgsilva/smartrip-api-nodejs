@@ -31,10 +31,10 @@ export const show = async (req: Request, res: Response) => {
 
 export const store = async (req: Request, res: Response) => {
     try {
-        const {description, licensePlate, brand, model} = req.body;
+        const {description, licensePlate, type} = req.body;
 
         const newVehicle = await Vehicle.create({
-            description, licensePlate, brand, model
+            description, licensePlate, type
         });
         
         res.status(201).json(newVehicle);
@@ -47,7 +47,7 @@ export const update = async (req: Request, res: Response) => {
     try {
         let {licensePlate} = req.params;
         let newLicensePlate = req.body.licensePlate;
-        let {description, brand, model} = req.body;
+        let {description, type} = req.body;
 
         let vehicle = await Vehicle.findOne({licensePlate});
         
@@ -55,8 +55,7 @@ export const update = async (req: Request, res: Response) => {
         if (vehicle){
             vehicle.description = description;
             vehicle.licensePlate = newLicensePlate;
-            vehicle.brand = brand;
-            vehicle.model = model;
+            vehicle.type = type;
             await vehicle.save();
             
             res.json(vehicle);

@@ -31,10 +31,10 @@ export const show = async (req: Request, res: Response) => {
 
 export const store = async (req: Request, res: Response) => {
     try {
-        const {name, email, password, cellPhone, course, educationalInstitution, type} = req.body;
+        const {name, email, password, cellPhone, educationalInstitution, type} = req.body;
 
         const newUser = await User.create({
-            name, email, password, cellPhone, course, educationalInstitution, type
+            name, email, password, cellPhone, educationalInstitution, type
         });
         
         res.status(201).json(newUser);
@@ -46,7 +46,7 @@ export const store = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
     try {
         let {_id} = req.params;
-        let {name, email, password, cellPhone, course, educationalInstitution, type} = req.body;
+        let {name, email, password, cellPhone, educationalInstitution, type} = req.body;
 
         let user = await User.findById(_id);
         
@@ -56,7 +56,6 @@ export const update = async (req: Request, res: Response) => {
             user.email = email;
             user.password = password;
             user.cellPhone = cellPhone;
-            user.course = course;
             user.educationalInstitution = educationalInstitution;
             user.type = type;
             await user.save();

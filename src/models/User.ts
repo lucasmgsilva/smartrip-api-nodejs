@@ -5,9 +5,8 @@ type UserType = {
     email: string,
     password: string,
     cellPhone: string,
-    course: string,
     educationalInstitution: string,
-    type: string;
+    type: string
 }
 
 const schema = new Schema<UserType>({
@@ -45,14 +44,14 @@ const schema = new Schema<UserType>({
     educationalInstitution: {
         type: String, 
         trim: true, 
-        required: true, 
+        required: false, 
         minlength: 3, 
         maxlength: 50
     },
     type: {
         type: String, 
         trim: true, 
-        required: true, 
+        required: false, 
         enum: [
             'driver', 
             'student', 
