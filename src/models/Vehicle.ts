@@ -1,13 +1,13 @@
 import { connection, model, Schema } from "mongoose"
 
-type BusType = {
+type VehicleType = {
     description: string,
     licensePlate: string,
     brand?: string,
     model?: string
 }
 
-const schema = new Schema<BusType>({
+const schema = new Schema<VehicleType>({
     description: {
         type: String, 
         trim: true, 
@@ -37,7 +37,7 @@ const schema = new Schema<BusType>({
     }
 })
 
-const modelName: string = 'Bus';
+const modelName: string = 'Vehicle';
 
-export const Bus = (connection && connection.models[modelName]) ? 
-    connection.models[modelName] : model<BusType>(modelName, schema);
+export const Vehicle = (connection && connection.models[modelName]) ? 
+    connection.models[modelName] : model<VehicleType>(modelName, schema);

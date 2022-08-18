@@ -6,9 +6,9 @@ type TrackingType = {
     speed: number
 }
 
-type TravelType = {
+type TripType = {
     route_id: Schema.Types.ObjectId,
-    bus_id: Schema.Types.ObjectId,
+    vehicle_id: Schema.Types.ObjectId,
     startTime: Date,
     endTime?: Date,
     isWayBack: boolean,
@@ -35,15 +35,15 @@ const TrackingSchema = new Schema<TrackingType>({
     }
 }, {_id: false});
 
-const schema = new Schema<TravelType>({
+const schema = new Schema<TripType>({
     route_id: {
         type: Schema.Types.ObjectId, 
         ref: 'Route', 
         required: true
     },
-    bus_id: {
+    vehicle_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Bus',
+        ref: 'Vehicle',
         required: true
     },
     startTime: {
@@ -62,7 +62,7 @@ const schema = new Schema<TravelType>({
     tracking: [TrackingSchema]
 })
 
-const modelName: string = 'Travel';
+const modelName: string = 'Trip';
 
-export const Travel = (connection && connection.models[modelName]) ? 
-    connection.models[modelName] : model<TravelType>(modelName, schema);
+export const Trip = (connection && connection.models[modelName]) ? 
+    connection.models[modelName] : model<TripType>(modelName, schema);

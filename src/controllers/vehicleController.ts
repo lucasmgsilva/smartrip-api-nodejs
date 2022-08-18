@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { Bus } from '../models/Bus';
+import { Vehicle } from '../models/Vehicle';
 
 export const index = async (req: Request, res: Response) => {
     try {
-        let buses = await Bus.find();
+        let vehicles = await Vehicle.find();
 
-        res.status(200).json(buses);
+        res.status(200).json(vehicles);
     } catch (error){
         res.status(400).json({error});
     }
@@ -15,14 +15,14 @@ export const show = async (req: Request, res: Response) => {
     try {
         let {licensePlate} = req.params;
 
-        let bus = await Bus.findOne({licensePlate});
+        let vehicle = await Vehicle.findOne({licensePlate});
 
         res.status(200);
 
-        if (bus){
-            res.json(bus);
+        if (vehicle){
+            res.json(vehicle);
         } else {
-            res.json({error: {message: 'Ônibus não encontrado.'}});
+            res.json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -33,11 +33,11 @@ export const store = async (req: Request, res: Response) => {
     try {
         const {description, licensePlate, brand, model} = req.body;
 
-        const newBus = await Bus.create({
+        const newVehicle = await Vehicle.create({
             description, licensePlate, brand, model
         });
         
-        res.status(201).json(newBus);
+        res.status(201).json(newVehicle);
     } catch (error){
         res.status(400).json({error})
     }
@@ -49,19 +49,19 @@ export const update = async (req: Request, res: Response) => {
         let newLicensePlate = req.body.licensePlate;
         let {description, brand, model} = req.body;
 
-        let bus = await Bus.findOne({licensePlate});
+        let vehicle = await Vehicle.findOne({licensePlate});
         
         res.status(200);
-        if (bus){
-            bus.description = description;
-            bus.licensePlate = newLicensePlate;
-            bus.brand = brand;
-            bus.model = model;
-            await bus.save();
+        if (vehicle){
+            vehicle.description = description;
+            vehicle.licensePlate = newLicensePlate;
+            vehicle.brand = brand;
+            vehicle.model = model;
+            await vehicle.save();
             
-            res.json(bus);
+            res.json(vehicle);
         } else {
-            res.json({error: {message: 'Ônibus não encontrado.'}});
+            res.json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -72,12 +72,12 @@ export const destroy = async (req: Request, res: Response) => {
     try {
         let {licensePlate} = req.params;
 
-        let bus = await Bus.findOneAndDelete({licensePlate});
+        let vehicle = await Vehicle.findOneAndDelete({licensePlate});
         
-        if (bus){
+        if (vehicle){
             res.status(204).json({});
         } else {
-            res.status(200).json({error: {message: 'Ônibus não encontrado.'}});
+            res.status(200).json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});

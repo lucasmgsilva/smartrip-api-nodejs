@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import * as BusController from '../controllers/busController';
+import * as VehicleController from '../controllers/vehicleController';
 import * as RouteController from '../controllers/routeController';
 import * as UserController from '../controllers/userController';
-import * as TravelController from '../controllers/travelController';
+import * as TripController from '../controllers/tripController';
 
 const router = Router();
 
@@ -12,12 +12,12 @@ router.get('/ping', (req, res) => {
     })
 });
 
-// Buses
-router.get('/buses', BusController.index);
-router.post('/buses', BusController.store);
-router.get('/buses/:licensePlate', BusController.show);
-router.put('/buses/:licensePlate', BusController.update);
-router.delete('/buses/:licensePlate', BusController.destroy);
+// Vehicles
+router.get('/vehicles', VehicleController.index);
+router.post('/vehicles', VehicleController.store);
+router.get('/vehicles/:licensePlate', VehicleController.show);
+router.put('/vehicles/:licensePlate', VehicleController.update);
+router.delete('/vehicles/:licensePlate', VehicleController.destroy);
 
 // Routes
 router.get('/routes', RouteController.index);
@@ -33,14 +33,14 @@ router.get('/users/:_id', UserController.show);
 router.put('/users/:_id', UserController.update);
 router.delete('/users/:_id', UserController.destroy);
 
-// Travels
-router.get('/travels', TravelController.index);
-router.post('/travels', TravelController.store);
-router.get('/travels/inProgress/:bus_id', TravelController.getTravelInProgressByBusID);
-router.get('/travels/currentLocation/:_id', TravelController.getCurrentLocationByTravelID);
-router.get('/travels/:_id', TravelController.show);
-router.put('/travels/tracking/:_id', TravelController.updateCurrentLocation);
-router.put('/travels/:_id', TravelController.update);
-router.delete('/travels/:_id', TravelController.destroy);
+// Trips
+router.get('/trips', TripController.index);
+router.post('/trips', TripController.store);
+router.get('/trips/inProgress/:vehicle_id', TripController.getTripInProgressByVehicleID);
+router.get('/trips/currentLocation/:_id', TripController.getCurrentLocationByTripID);
+router.get('/trips/:_id', TripController.show);
+router.put('/trips/tracking/:_id', TripController.updateCurrentLocation);
+router.put('/trips/:_id', TripController.update);
+router.delete('/trips/:_id', TripController.destroy);
 
 export default router;
