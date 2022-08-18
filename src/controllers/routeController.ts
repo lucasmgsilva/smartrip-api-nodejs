@@ -31,10 +31,10 @@ export const show = async (req: Request, res: Response) => {
 
 export const store = async (req: Request, res: Response) => {
     try {
-        const {description, cities} = req.body;
+        const {description, stoppingPoints} = req.body;
 
         const newRoute = await Route.create({
-            description, cities
+            description, stoppingPoints
         });
         
         res.status(201).json(newRoute);
@@ -46,14 +46,14 @@ export const store = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
     try {
         let {_id} = req.params;
-        let {description, cities} = req.body;
+        let {description, stoppingPoints} = req.body;
 
         let route = await Route.findById(_id);
         
         res.status(200);
         if (route){
             route.description = description;
-            route.cities = cities;
+            route.stoppingPoints = stoppingPoints;
             await route.save();
             
             res.json(route);

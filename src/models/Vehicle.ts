@@ -3,8 +3,7 @@ import { connection, model, Schema } from "mongoose"
 type VehicleType = {
     description: string,
     licensePlate: string,
-    brand?: string,
-    model?: string
+    type: string
 }
 
 const schema = new Schema<VehicleType>({
@@ -23,17 +22,15 @@ const schema = new Schema<VehicleType>({
         maxlength: 8, 
         unique: true
     },
-    brand: {
+    type: {
         type: String, 
         trim: true, 
-        minlength: 3, 
-        maxlength: 15
-    },
-    model: {
-        type: String, 
-        trim: true, 
-        minlength: 3, 
-        maxlength: 15
+        required: true, 
+        enum: [
+            'bus', 
+            'micro_bus', 
+            'van'
+        ]
     }
 })
 
