@@ -1,5 +1,7 @@
 import e, { Request, Response } from 'express';
+import { Route } from '../models/Route';
 import { Trip } from '../models/Trip';
+import { Vehicle } from '../models/Vehicle';
 
 export const index = async (req: Request, res: Response) => {
     try {
@@ -75,6 +77,14 @@ export const getCurrentLocationByTripID = async (req: Request, res: Response) =>
 export const store = async (req: Request, res: Response) => {
     try {
         let {route_id, vehicle_id, startTime, endTime, isWayBack, tracking} = req.body;
+
+        if (!await Route.findOne({route_id})) {
+            return res.status(400).json({error: {message: 'A rota não existe.'}});
+        }
+
+        if (!await Vehicle.findOne({vehicle_id})) {
+            return res.status(400).json({error: {message: 'O veículo não existe.'}});
+        }
         
         let trip = await Trip.findOne({vehicle_id, endTime: null});
 
