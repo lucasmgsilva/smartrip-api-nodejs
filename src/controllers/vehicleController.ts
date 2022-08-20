@@ -3,7 +3,7 @@ import { Vehicle } from '../models/Vehicle';
 
 export const index = async (req: Request, res: Response) => {
     try {
-        let vehicles = await Vehicle.find();
+        const vehicles = await Vehicle.find();
 
         res.status(200).json(vehicles);
     } catch (error){
@@ -13,16 +13,14 @@ export const index = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
     try {
-        let {licensePlate} = req.params;
+        const {licensePlate} = req.params;
 
-        let vehicle = await Vehicle.findOne({licensePlate});
-
-        res.status(200);
+        const vehicle = await Vehicle.findOne({licensePlate});
 
         if (vehicle){
-            res.json(vehicle);
+            res.status(200).json(vehicle);
         } else {
-            res.json({error: {message: 'Veículo não encontrado.'}});
+            res.status(400).json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -45,22 +43,21 @@ export const store = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        let {licensePlate} = req.params;
-        let newLicensePlate = req.body.licensePlate;
-        let {description, type} = req.body;
+        const {licensePlate} = req.params;
+        const newLicensePlate = req.body.licensePlate;
+        const {description, type} = req.body;
 
-        let vehicle = await Vehicle.findOne({licensePlate});
+        const vehicle = await Vehicle.findOne({licensePlate});
         
-        res.status(200);
         if (vehicle){
             vehicle.description = description;
             vehicle.licensePlate = newLicensePlate;
             vehicle.type = type;
             await vehicle.save();
             
-            res.json(vehicle);
+            res.status(200).json(vehicle);
         } else {
-            res.json({error: {message: 'Veículo não encontrado.'}});
+            res.status(400).json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -69,14 +66,14 @@ export const update = async (req: Request, res: Response) => {
 
 export const destroy = async (req: Request, res: Response) => {
     try {
-        let {licensePlate} = req.params;
+        const {licensePlate} = req.params;
 
-        let vehicle = await Vehicle.findOneAndDelete({licensePlate});
+        const vehicle = await Vehicle.findOneAndDelete({licensePlate});
         
         if (vehicle){
             res.status(204).json({});
         } else {
-            res.status(200).json({error: {message: 'Veículo não encontrado.'}});
+            res.status(400).json({error: {message: 'Veículo não encontrado.'}});
         }
     } catch (error){
         res.status(400).json({error});

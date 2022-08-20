@@ -36,11 +36,12 @@ router.delete('/users/:_id', UserController.destroy);
 // Trips
 router.get('/trips', TripController.index);
 router.post('/trips', TripController.store);
-router.get('/trips/inProgress/:vehicle_id', TripController.getTripInProgressByVehicleID);
-router.get('/trips/currentLocation/:_id', TripController.getCurrentLocationByTripID);
 router.get('/trips/:_id', TripController.show);
-router.put('/trips/tracking/:_id', TripController.updateCurrentLocation);
 router.put('/trips/:_id', TripController.update);
 router.delete('/trips/:_id', TripController.destroy);
+
+router.get('/trips/inProgress/:vehicle_id', TripController.getTripInProgressByVehicleID);
+router.get('/trips/currentLocation/:_id', TripController.getCurrentLocationByTripID);
+router.put('/trips/tracking/:_id', TripController.updateCurrentLocation);
 
 export default router;

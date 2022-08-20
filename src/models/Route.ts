@@ -20,11 +20,15 @@ type RouteType = {
 const CoordinateSchema = new Schema<Coordinate>({
     lat: {
         type: Number, 
-        required: true
+        required: true,
+        min: -90,
+        max: 90
     },
     lng: {
         type: Number, 
-        required: true
+        required: true,
+        min: -180,
+        max: 180
     }
 })
 
@@ -38,7 +42,8 @@ const StoppingPointSchema = new Schema<StoppingPoint>({
     },
     executionOrder: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     coordinates: {
         type: CoordinateSchema, 

@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { Route } from '../models/Route';
+import { User } from '../models/User';
 
 export const index = async (req: Request, res: Response) => {
     try {
-        let routes = await Route.find();
+        const routes = await Route.find();
 
         res.status(200).json(routes);
     } catch (error){
@@ -13,16 +14,14 @@ export const index = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
+        const {_id} = req.params;
 
-        let route = await Route.findById(_id);
-
-        res.status(200);
+        const route = await Route.findById(_id);
 
         if (route){
-            res.json(route);
+            res.status(200).json(route);
         } else {
-            res.json({error: {message: 'Rota não encontrada.'}});
+            res.status(400).json({error: {message: 'Rota não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -33,11 +32,25 @@ export const store = async (req: Request, res: Response) => {
     try {
         const {description, stoppingPoints, passengers_id} = req.body;
 
-        const newRoute = await Route.create({
-            description, stoppingPoints, passengers_id
-        });
-        
-        res.status(201).json(newRoute);
+        if (passengers_id.length > 0){
+            const count = await User.find({
+                _id: {$in: passengers_id},
+            }).countDocuments();
+            
+            if (count === passengers_id.length){
+                const newRoute = await Route.create({
+                    description, stoppingPoints, passengers_id
+                });
+                res.status(201).json(newRoute);
+            } else {
+                res.status(400).json({error: {message: 'Usuário(s) não encontrado(s).'}});
+            }
+        } else {
+            const newRoute = await Route.create({
+                description, stoppingPoints
+            });
+            res.status(201).json(newRoute);
+        }
     } catch (error){
         res.status(400).json({error})
     }
@@ -45,21 +58,35 @@ export const store = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
-        let {description, stoppingPoints, passengers_id} = req.body;
+        const {_id} = req.params;
+        const {description, stoppingPoints, passengers_id} = req.body;
 
-        let route = await Route.findById(_id);
+        const route = await Route.findById(_id);
         
-        res.status(200);
         if (route){
             route.description = description;
             route.stoppingPoints = stoppingPoints;
-            route.passengers_id = passengers_id;
-            await route.save();
-            
-            res.json(route);
+
+            if (passengers_id.length > 0){
+                const count = await User.find({
+                    _id: {$in: passengers_id},
+                }).countDocuments();
+                
+                if (count === passengers_id.length){
+                    route.passengers_id = passengers_id;
+                    await route.save();
+                    res.status(200).json(route);
+                } else {
+                    res.status(400).json({error: {message: 'Usuário(s) não encontrado(s).'}});
+                    return;
+                }
+            } else {
+                route.passengers_id = [];
+                await route.save();
+                res.status(200).json(route);
+            }
         } else {
-            res.json({error: {message: 'Rota não encontrada.'}});
+            res.status(400).json({error: {message: 'Rota não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -68,14 +95,14 @@ export const update = async (req: Request, res: Response) => {
 
 export const destroy = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
+        const {_id} = req.params;
 
-        let route = await Route.findOneAndDelete({_id});
+        const route = await Route.findOneAndDelete({_id});
         
         if (route){
             res.status(204).json({});
         } else {
-            res.status(200).json({error: {message: 'Rota não encontrada.'}});
+            res.status(400).json({error: {message: 'Rota não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});

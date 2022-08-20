@@ -5,7 +5,7 @@ import { Vehicle } from '../models/Vehicle';
 
 export const index = async (req: Request, res: Response) => {
     try {
-        let trips = await Trip.find();
+        const trips = await Trip.find();
 
         res.status(200).json(trips);
     } catch (error){
@@ -15,59 +15,14 @@ export const index = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
+        const {_id} = req.params;
 
-        let trip = await Trip.findById(_id);
-
-        res.status(200);
+        const trip = await Trip.findById(_id);
 
         if (trip){
-            res.json(trip);
+            res.status(200).json(trip);
         } else {
-            res.json({error: {message: 'Viagem não encontrada.'}});
-        }
-    } catch (error){
-        res.status(400).json({error});
-    }
-}
-
-export const getTripInProgressByVehicleID = async (req: Request, res: Response) => {
-    try {
-        let {vehicle_id} = req.params;
-
-        let trip = await Trip.findOne({"vehicle_id": vehicle_id, "endTime": null});
-
-        res.status(200);
-
-        if (trip){
-            res.json(trip);
-        } else {
-            res.json({error: {message: 'Nenhuma viagem em andamento com esse veículo foi encontrada.'}});
-        }
-    } catch (error){
-        res.status(400).json({error});
-    }
-}
-
-export const getCurrentLocationByTripID = async (req: Request, res: Response) => {
-    try {
-        let {_id} = req.params;
-
-        let trip = await Trip.findOne({_id}, 'tracking');
-        
-        res.status(200);
-
-        if (trip){
-            let length = trip.tracking?.length;
-
-            if (length > 0){
-                let currentLocation = trip.tracking[length - 1];
-                res.json(currentLocation);
-            } else {
-                res.json({});
-            }
-        } else {
-            res.json({error: {message: 'Viagem não encontrada.'}});
+            res.status(400).json({error: {message: 'Viagem não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -76,28 +31,33 @@ export const getCurrentLocationByTripID = async (req: Request, res: Response) =>
 
 export const store = async (req: Request, res: Response) => {
     try {
-        let {route_id, vehicle_id, startTime, endTime, isWayBack, tracking} = req.body;
+        const {route_id, vehicle_id, startTime, endTime, isWayBack, tracking} = req.body;
 
-        if (!await Route.findOne({route_id})) {
-            return res.status(400).json({error: {message: 'A rota não existe.'}});
+        const route = await Route.findById(route_id);
+        const vehicle = await Vehicle.findById(vehicle_id);
+
+        if (!route) {
+            return res.status(400).json({error: {message: 'Rota não encontrada.'}});
         }
 
-        if (!await Vehicle.findOne({vehicle_id})) {
-            return res.status(400).json({error: {message: 'O veículo não existe.'}});
+        if (!vehicle) {
+            return res.status(400).json({error: {message: 'Veículo não encontrado.'}});
         }
         
-        let trip = await Trip.findOne({vehicle_id, endTime: null});
+        //Verifica se existe uma viagem existente para o veículo
+        const trip = await Trip.findOne({vehicle_id, endTime: null});
 
         if (trip){
             res.status(403).json({error: {message: 'Já existe uma viagem em andamento com esse veículo.'}})
             return;
+        } else {
+            const newTrip = await Trip.create({
+                route_id, vehicle_id, startTime, endTime, isWayBack, tracking
+            });
+            
+            res.status(201).json(newTrip);
         }
 
-        let newTrip = await Trip.create({
-            route_id, vehicle_id, startTime, endTime, isWayBack, tracking
-        });
-        
-        res.status(201).json(newTrip);
     } catch (error){
         res.status(400).json({error})
     }
@@ -105,12 +65,22 @@ export const store = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
-        let {route_id, vehicle_id, startTime, endTime, isWayBack, tracking} = req.body;
+        const {_id} = req.params;
+        const {route_id, vehicle_id, startTime, endTime, isWayBack, tracking} = req.body;
 
-        let trip = await Trip.findById(_id);
+        const route = await Route.findById(route_id);
+        const vehicle = await Vehicle.findById(vehicle_id);
+
+        if (!route) {
+            return res.status(400).json({error: {message: 'Rota não encontrada.'}});
+        }
+
+        if (!vehicle) {
+            return res.status(400).json({error: {message: 'Veículo não encontrado.'}});
+        }
+
+        const trip = await Trip.findById(_id);
         
-        res.status(200);
         if (trip){
             trip.route_id = route_id;
             trip.vehicle_id = vehicle_id;
@@ -120,35 +90,9 @@ export const update = async (req: Request, res: Response) => {
             trip.tracking = tracking;
             await trip.save();
             
-            res.json(trip);
+            res.status(200).json(trip);
         } else {
-            res.json({error: {message: 'Viagem não encontrada.'}});
-        }
-    } catch (error){
-        res.status(400).json({error});
-    }
-}
-
-export const updateCurrentLocation = async (req: Request, res: Response) => {
-    try {
-        let {_id} = req.params;
-        let {lat, lng, speed} = req.body;
-
-        let trip = await Trip.findById(_id);
-
-        if (trip?.endTime){
-            res.status(403).json({error: {message: 'Viagem encerrada.'}});
-            return;
-        }
-
-        res.status(200);
-        if (trip){
-            trip.tracking.push({lat, lng, speed});
-            await trip.save();
-            
-            res.json(trip);
-        } else {
-            res.json({error: {message: 'Viagem não encontrada.'}});
+            res.status(400).json({error: {message: 'Viagem não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
@@ -157,15 +101,77 @@ export const updateCurrentLocation = async (req: Request, res: Response) => {
 
 export const destroy = async (req: Request, res: Response) => {
     try {
-        let {_id} = req.params;
+        const {_id} = req.params;
 
-        let trip = await Trip.findOneAndDelete({_id});
+        const trip = await Trip.findOneAndDelete({_id});
         
-        ;
         if (trip){
             res.status(204).json({});
         } else {
-            res.status(200).json({error: {message: 'Viagem não encontrada.'}});
+            res.status(400).json({error: {message: 'Viagem não encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
+export const getTripInProgressByVehicleID = async (req: Request, res: Response) => {
+    try {
+        const {vehicle_id} = req.params;
+
+        const trip = await Trip.findOne({vehicle_id, endTime: null});
+
+        if (trip){
+            res.status(200).json(trip);
+        } else {
+            res.status(400).json({error: {message: 'Nenhuma viagem em andamento com esse veículo foi encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
+export const getCurrentLocationByTripID = async (req: Request, res: Response) => {
+    try {
+        const {_id} = req.params;
+
+        const trip = await Trip.findOne({_id}, 'tracking');
+
+        if (trip){
+            const length = trip.tracking?.length;
+
+            if (length > 0){
+                const currentLocation = trip.tracking[length - 1];
+                res.status(200).json(currentLocation);
+            } else {
+                res.status(200).json({});
+            }
+        } else {
+            res.status(400).json({error: {message: 'Viagem não encontrada.'}});
+        }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
+export const updateCurrentLocation = async (req: Request, res: Response) => {
+    try {
+        const {_id} = req.params;
+        const {lat, lng, speed} = req.body;
+
+        const trip = await Trip.findById(_id);
+
+        if (trip?.endTime){
+            res.status(403).json({error: {message: 'Viagem encerrada.'}});
+        }
+
+        if (trip){
+            trip.tracking.push({lat, lng, speed});
+            await trip.save();
+            
+            res.status(200).json(trip);
+        } else {
+            res.status(400).json({error: {message: 'Viagem não encontrada.'}});
         }
     } catch (error){
         res.status(400).json({error});
