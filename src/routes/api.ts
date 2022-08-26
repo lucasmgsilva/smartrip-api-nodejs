@@ -15,9 +15,9 @@ router.get('/ping', (req, res) => {
 // Vehicles
 router.get('/vehicles', VehicleController.index);
 router.post('/vehicles', VehicleController.store);
-router.get('/vehicles/:licensePlate', VehicleController.show);
-router.put('/vehicles/:licensePlate', VehicleController.update);
-router.delete('/vehicles/:licensePlate', VehicleController.destroy);
+router.get('/vehicles/:_id', VehicleController.show);
+router.put('/vehicles/:_id', VehicleController.update);
+router.delete('/vehicles/:_id', VehicleController.destroy);
 
 // Routes
 router.get('/routes', RouteController.index);
@@ -41,7 +41,7 @@ router.put('/trips/:_id', TripController.update);
 router.delete('/trips/:_id', TripController.destroy);
 
 router.get('/trips/inProgress/:vehicle_id', TripController.getTripInProgressByVehicleID);
-router.get('/trips/currentLocation/:_id', TripController.getCurrentLocationByTripID);
-router.put('/trips/tracking/:_id', TripController.updateCurrentLocation);
+router.get('/trips/:_id/currentVehicleLocation', TripController.getCurrentVehicleLocationByTripID);
+router.post('/trips/:_id/currentVehicleLocation/', TripController.storeCurrentVehicleLocationByTripID);
 
 export default router;

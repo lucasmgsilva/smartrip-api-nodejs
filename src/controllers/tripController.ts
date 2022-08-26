@@ -131,7 +131,7 @@ export const getTripInProgressByVehicleID = async (req: Request, res: Response) 
     }
 }
 
-export const getCurrentLocationByTripID = async (req: Request, res: Response) => {
+export const getCurrentVehicleLocationByTripID = async (req: Request, res: Response) => {
     try {
         const {_id} = req.params;
 
@@ -154,7 +154,7 @@ export const getCurrentLocationByTripID = async (req: Request, res: Response) =>
     }
 }
 
-export const updateCurrentLocation = async (req: Request, res: Response) => {
+export const storeCurrentVehicleLocationByTripID = async (req: Request, res: Response) => {
     try {
         const {_id} = req.params;
         const {lat, lng, speed} = req.body;

@@ -43,7 +43,7 @@ export const store = async (req: Request, res: Response) => {
                 });
                 res.status(201).json(newRoute);
             } else {
-                res.status(400).json({error: {message: 'Usuário(s) não encontrado(s).'}});
+                res.status(400).json({error: {message: 'Passageiro(s) não encontrado(s).'}});
             }
         } else {
             const newRoute = await Route.create({

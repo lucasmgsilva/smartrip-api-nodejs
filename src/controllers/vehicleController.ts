@@ -13,9 +13,9 @@ export const index = async (req: Request, res: Response) => {
 
 export const show = async (req: Request, res: Response) => {
     try {
-        const {licensePlate} = req.params;
+        const {_id} = req.params;
 
-        const vehicle = await Vehicle.findOne({licensePlate});
+        const vehicle = await Vehicle.findById(_id);
 
         if (vehicle){
             res.status(200).json(vehicle);
@@ -43,11 +43,11 @@ export const store = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
     try {
-        const {licensePlate} = req.params;
+        const {_id} = req.params;
         const newLicensePlate = req.body.licensePlate;
         const {description, type} = req.body;
 
-        const vehicle = await Vehicle.findOne({licensePlate});
+        const vehicle = await Vehicle.findById(_id);
         
         if (vehicle){
             vehicle.description = description;
@@ -66,9 +66,9 @@ export const update = async (req: Request, res: Response) => {
 
 export const destroy = async (req: Request, res: Response) => {
     try {
-        const {licensePlate} = req.params;
+        const {_id} = req.params;
 
-        const vehicle = await Vehicle.findOneAndDelete({licensePlate});
+        const vehicle = await Vehicle.findById(_id);
         
         if (vehicle){
             res.status(204).json({});
