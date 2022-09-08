@@ -15,7 +15,7 @@ export const show = async (req: Request, res: Response) => {
     try {
         const {_id} = req.params;
 
-        const user = await User.findById(_id);
+        const user = await User.findById(_id).select('-password');
 
         if (user){
             res.status(200).json(user);
