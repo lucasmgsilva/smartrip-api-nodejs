@@ -48,13 +48,15 @@ export const update = async (req: Request, res: Response) => {
 
         const user = await User.findById(_id);
         
-        if (user){
+        if (user) {
             user.name = name;
             user.email = email;
-            user.password = password;
             user.cellPhone = cellPhone;
             user.educationalInstitution = educationalInstitution;
             user.type = type;
+
+            if (password) user.password = password;
+
             await user.save();
             
             res.status(200).json(user);
