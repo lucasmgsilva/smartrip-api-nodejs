@@ -45,7 +45,7 @@ const schema = new Schema<UserType>({
         type: String, 
         trim: true, 
         required: false, 
-        minlength: 1, 
+        minlength: 3, 
         maxlength: 50
     },
     type: {
