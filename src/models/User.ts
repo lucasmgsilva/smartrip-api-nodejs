@@ -31,7 +31,7 @@ const schema = new Schema<UserType>({
         trim: true, 
         required: true, 
         minlength: 6, 
-        maxlength: 25
+        maxlength: 24
     },
     cellPhone: {
         type: String, 
@@ -45,7 +45,7 @@ const schema = new Schema<UserType>({
         type: String, 
         trim: true, 
         required: false, 
-        minlength: 3, 
+        minlength: 1, 
         maxlength: 50
     },
     type: {
