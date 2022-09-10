@@ -33,7 +33,7 @@ const TrackingSchema = new Schema<TrackingType>({
         required: true,
         min: 0
     }
-}, {_id: false});
+}/* , {_id: false} */);
 
 const schema = new Schema<TripType>({
     route_id: {

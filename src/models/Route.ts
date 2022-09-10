@@ -49,7 +49,7 @@ const StoppingPointSchema = new Schema<StoppingPoint>({
         type: CoordinateSchema, 
         required: true
     }
-}, {_id: false})
+}/* , {_id: false} */)
 
 const schema = new Schema<RouteType>({
     description: {
