@@ -32,7 +32,7 @@ export const store = async (req: Request, res: Response) => {
         const {name, email, password, cellPhone, educationalInstitution, type} = req.body;
 
         const newUser = await User.create({
-            name, email, password, cellPhone, educationalInstitution, type
+            name, email, password, cellPhone, educationalInstitution: (educationalInstitution.length > 0 ? educationalInstitution : null), type
         });
         
         res.status(201).json(newUser);
@@ -52,7 +52,7 @@ export const update = async (req: Request, res: Response) => {
             user.name = name;
             user.email = email;
             user.cellPhone = cellPhone;
-            user.educationalInstitution = educationalInstitution;
+            user.educationalInstitution = educationalInstitution.length > 0 ? educationalInstitution : null;
             user.type = type;
 
             if (password) user.password = password;
