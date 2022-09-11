@@ -3,7 +3,7 @@ import { connection, model, Schema } from "mongoose"
 type VehicleType = {
     description: string,
     licensePlate: string,
-    type: 'bus' | 'micro_bus' | 'van'
+    type: 'bus' | 'minibus' | 'van'
 }
 
 const schema = new Schema<VehicleType>({
@@ -28,7 +28,7 @@ const schema = new Schema<VehicleType>({
         required: true, 
         enum: [
             'bus', 
-            'micro_bus', 
+            'minibus', 
             'van'
         ]
     }
