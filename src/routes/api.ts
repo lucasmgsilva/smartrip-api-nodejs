@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as VehicleController from '../controllers/vehicleController';
 import * as RouteController from '../controllers/routeController';
 import * as UserController from '../controllers/userController';
+import * as AuthController from '../controllers/AuthController';
 import * as TripController from '../controllers/tripController';
 
 const router = Router();
@@ -32,6 +33,9 @@ router.post('/users', UserController.store);
 router.get('/users/:_id', UserController.show);
 router.put('/users/:_id', UserController.update);
 router.delete('/users/:_id', UserController.destroy);
+
+// Auth
+router.post('/auth', AuthController.index);
 
 // Trips
 router.get('/trips', TripController.index);
