@@ -1,3 +1,6 @@
+import { Route, RouteType } from "../models/Route";
+import { TripType } from "../models/Trip";
+
 function toRad(value: number) {
     return value * Math.PI / 180;
 }

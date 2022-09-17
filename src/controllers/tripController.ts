@@ -136,14 +136,15 @@ export const getCurrentVehicleLocationByTripID = async (req: Request, res: Respo
     try {
         const {_id} = req.params;
 
-        const trip = await Trip.findOne({_id}, 'tracking');
+        const trip = await Trip.findOne({_id}, 'tracking stoppingPointsPerformed_id');
 
         if (trip){
             const length = trip.tracking?.length;
 
             if (length > 0){
                 const currentLocation = trip.tracking[length - 1];
-                res.status(200).json(currentLocation);
+
+                res.status(200).json({lat: currentLocation.lat, lng: currentLocation.lng, speed: currentLocation.speed, stoppingPointsPerformed_id: trip.stoppingPointsPerformed_id});
             } else {
                 res.status(200).json({});
             }
@@ -164,9 +165,7 @@ export const storeCurrentVehicleLocationByTripID = async (req: Request, res: Res
 
         if (trip?.endTime){
             res.status(403).json({error: {message: 'Viagem encerrada.'}});
-        }
-
-        if (trip){
+        } else if (trip){
             trip.tracking.push({lat, lng, speed});
 
             const route: RouteType = await Route.findById(trip.route_id);
@@ -180,6 +179,10 @@ export const storeCurrentVehicleLocationByTripID = async (req: Request, res: Res
 
                 if (shouldBeInsertStoppingPoint){
                     trip.stoppingPointsPerformed_id.push(stoppingPointMatching._id);
+
+                    if (route.stoppingPoints.every(stoppingPoint => (trip as TripType).stoppingPointsPerformed_id.includes(stoppingPoint._id))){
+                        trip.endTime = new Date();
+                    }
                 }
             }
 
