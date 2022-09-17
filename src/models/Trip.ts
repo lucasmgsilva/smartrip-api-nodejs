@@ -6,12 +6,13 @@ type TrackingType = {
     speed: number
 }
 
-type TripType = {
+export type TripType = {
     route_id: Schema.Types.ObjectId,
     vehicle_id: Schema.Types.ObjectId,
     startTime: Date,
     endTime?: Date,
     isWayBack: boolean,
+    stoppingPointsPerformed_id: Schema.Types.ObjectId[],
     tracking: [TrackingType]
 }
 
@@ -59,7 +60,12 @@ const schema = new Schema<TripType>({
         required: true,
         default: false
     },
-    tracking: [TrackingSchema]
+    stoppingPointsPerformed_id: [{
+        type: Schema.Types.ObjectId,
+        ref: 'StoppingPoint',
+        required: false
+    }],
+    tracking: [TrackingSchema],
 })
 
 const modelName: string = 'Trip';

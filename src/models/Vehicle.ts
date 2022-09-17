@@ -1,6 +1,6 @@
 import { connection, model, Schema } from "mongoose"
 
-type VehicleType = {
+export type VehicleType = {
     description: string,
     licensePlate: string,
     type: 'bus' | 'minibus' | 'van'

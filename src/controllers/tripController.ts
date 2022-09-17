@@ -1,7 +1,8 @@
 import e, { Request, Response } from 'express';
-import { Route } from '../models/Route';
-import { Trip } from '../models/Trip';
+import { Route, RouteType } from '../models/Route';
+import { Trip, TripType } from '../models/Trip';
 import { Vehicle } from '../models/Vehicle';
+import { getDistanceBetweenCoordinatesInKm } from '../utils/functions';
 
 export const index = async (req: Request, res: Response) => {
     try {
@@ -167,6 +168,21 @@ export const storeCurrentVehicleLocationByTripID = async (req: Request, res: Res
 
         if (trip){
             trip.tracking.push({lat, lng, speed});
+
+            const route: RouteType = await Route.findById(trip.route_id);
+
+            //Verifica se existe um ponto de parada na localização em que o ônibus está
+            const stoppingPointMatching = route.stoppingPoints.find(stoppingPoint => getDistanceBetweenCoordinatesInKm(stoppingPoint.coordinates.lat, stoppingPoint.coordinates.lng, lat, lng) <= 0.025); //25 metros
+
+            if (stoppingPointMatching){
+                //Se existir um ponto de parada na localização em que o ônibus está, verifica se o ônibus já passou por ele para não registrar a passagem duas vezes
+                const shouldBeInsertStoppingPoint = !(trip as TripType).stoppingPointsPerformed_id.includes(stoppingPointMatching._id)
+
+                if (shouldBeInsertStoppingPoint){
+                    trip.stoppingPointsPerformed_id.push(stoppingPointMatching._id);
+                }
+            }
+
             await trip.save();
             
             res.status(200).json(trip);

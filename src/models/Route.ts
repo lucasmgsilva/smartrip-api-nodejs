@@ -1,4 +1,4 @@
-import { connection, model, Schema } from "mongoose"
+import { connection, model, ObjectId, Schema } from "mongoose"
 
 type Coordinate = {
     lat: number,
@@ -6,12 +6,13 @@ type Coordinate = {
 }
 
 type StoppingPoint = {
+    _id: ObjectId,
     description: string,
     executionOrder: number,
     coordinates: Coordinate
 }
 
-type RouteType = {
+export type RouteType = {
     description: string,
     stoppingPoints: [StoppingPoint]
     passengers_id: [Schema.Types.ObjectId]
