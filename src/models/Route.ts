@@ -31,7 +31,7 @@ const CoordinateSchema = new Schema<Coordinate>({
         min: -180,
         max: 180
     }
-})
+}, {_id: false})
 
 const StoppingPointSchema = new Schema<StoppingPoint>({
     description: {
@@ -58,7 +58,7 @@ const schema = new Schema<RouteType>({
         trim: true, 
         required: true, 
         minlength: 3, 
-        maxlength: 45
+        maxlength: 75
     },
     stoppingPoints: {
         type: [StoppingPointSchema], 

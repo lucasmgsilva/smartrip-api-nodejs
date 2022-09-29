@@ -68,7 +68,7 @@ export const destroy = async (req: Request, res: Response) => {
     try {
         const {_id} = req.params;
 
-        const vehicle = await Vehicle.findById(_id);
+        const vehicle = await Vehicle.findOneAndDelete({_id});
         
         if (vehicle){
             res.status(204).json({});
