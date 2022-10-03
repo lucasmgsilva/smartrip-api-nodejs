@@ -44,6 +44,7 @@ router.get('/trips/:_id', TripController.show);
 router.put('/trips/:_id', TripController.update);
 router.delete('/trips/:_id', TripController.destroy);
 
+router.get('/trips/byUser/:user_id', TripController.getAllTripsByUserID);
 router.get('/trips/inProgress/:vehicle_id', TripController.getTripInProgressByVehicleID);
 router.get('/trips/:_id/currentVehicleLocation', TripController.getCurrentVehicleLocationByTripID);
 router.post('/trips/:_id/currentVehicleLocation/', TripController.storeCurrentVehicleLocationByTripID);

@@ -1,6 +1,7 @@
 import e, { Request, Response } from 'express';
 import { Route, RouteType } from '../models/Route';
 import { Trip, TripType } from '../models/Trip';
+import { User, UserType } from '../models/User';
 import { Vehicle } from '../models/Vehicle';
 import { getDistanceBetweenCoordinatesInKm } from '../utils/functions';
 
@@ -111,6 +112,41 @@ export const destroy = async (req: Request, res: Response) => {
         } else {
             res.status(400).json({error: {message: 'Viagem não encontrada.'}});
         }
+    } catch (error){
+        res.status(400).json({error});
+    }
+}
+
+export const getAllTripsByUserID = async (req: Request, res: Response) => {
+    try {
+        const {user_id} = req.params
+
+        const user: UserType = await User.findById(user_id);
+
+        if (user){
+            if (user.type === 'driver' || user.type === 'administrator'){
+                const trips = await Trip.find().select('-tracking');
+
+                res.status(200).json(trips);
+            } else {
+                const routes = await Route.find({
+                    passengers_id: user_id 
+                });
+
+                const routes_id = routes.map(route => route._id);
+
+                const trips = await Trip.find({
+                    route_id: {
+                        $in: routes_id
+                    }
+                }).select('-tracking');
+                
+                res.status(200).json(trips);
+            }
+        } else {
+            res.status(400).json({error: {message: 'Usuário não encontrado.'}});
+        }
+
     } catch (error){
         res.status(400).json({error});
     }
