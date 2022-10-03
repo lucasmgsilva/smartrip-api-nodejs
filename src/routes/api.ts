@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as VehicleController from '../controllers/vehicleController';
 import * as RouteController from '../controllers/routeController';
 import * as UserController from '../controllers/userController';
-import * as AuthController from '../controllers/AuthController';
+import * as AuthController from '../controllers/authController';
 import * as TripController from '../controllers/tripController';
 
 const router = Router();
