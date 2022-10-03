@@ -5,7 +5,7 @@ export const index = async (req: Request, res: Response) => {
     try {
         const {email, password} = req.body;
 
-        const user = await User.findOne({email, password});
+        const user = await User.findOne({email, password}).select('-password');
 
         if (user){
             if (user.type){
